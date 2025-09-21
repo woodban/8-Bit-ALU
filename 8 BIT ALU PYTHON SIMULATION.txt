@@ -1,0 +1,57 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# User input for A, B, and operation
+a_bin = input("Enter 8-bit binary value for A (e.g., 11001010): ")
+b_bin = input("Enter 8-bit binary value for B (e.g., 01100101): ")
+op = input("Enter operation - ADD or SUB: ").strip().upper()
+
+# Validate and parse inputs
+if len(a_bin) != 8 or len(b_bin) != 8 or not all(i in '01' for i in a_bin+b_bin):
+    raise ValueError("Input must be two 8-bit binary numbers.")
+
+a_int = int(a_bin, 2)
+b_int = int(b_bin, 2)
+
+# Operation
+if op == 'ADD':
+    result_int = (a_int + b_int) & 0xFF
+elif op == 'SUB':
+    result_int = (a_int - b_int) & 0xFF
+else:
+    raise ValueError("Operation must be ADD or SUB.")
+
+result_bin = format(result_int, '08b')
+
+# Timing simulation
+t_steps = 100
+time = np.linspace(0, 0.12, t_steps)
+
+# Function to create digital pulse for each input bit
+def bit_to_wave(bit):
+    # 5V level for 1, 0V for 0
+    return np.ones(t_steps)*5.0 if bit == '1' else np.zeros(t_steps)
+
+# Plot input and output waveforms per bit
+fig, axs = plt.subplots(3, 1, figsize=(10, 8), sharex=True)
+
+for i in range(8):
+    axs[0].plot(time, bit_to_wave(a_bin[i]), label=f"A[{7-i}]")
+    axs[1].plot(time, bit_to_wave(b_bin[i]), label=f"B[{7-i}]")
+    axs[2].plot(time, bit_to_wave(result_bin[i]), label=f"OUT[{7-i}]")
+
+axs[0].set_title(f"Input A ({a_bin})")
+axs[1].set_title(f"Input B ({b_bin})")
+axs[2].set_title(f"Result ({result_bin}) - {'Addition' if op=='ADD' else 'Subtraction'}")
+for ax in axs:
+    ax.set_ylabel("Voltage (V)")
+    ax.set_ylim(-0.1, 5.2)
+    ax.grid()
+axs[2].set_xlabel("Time (s)")
+
+axs[0].legend(loc='upper right', ncol=4, fontsize=8)
+axs[1].legend(loc='upper right', ncol=4, fontsize=8)
+axs[2].legend(loc='upper right', ncol=4, fontsize=8)
+
+plt.tight_layout()
+plt.show()
