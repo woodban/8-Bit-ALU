@@ -31,7 +31,7 @@ This project demonstrates fundamental principles of digital arithmetic, binary o
 ---
 
 ## Schematic & Layout  
-📌 *Add screenshots of your KiCad schematic and PCB layout here.*  
+  
 
 - **8-bit ALU Schematic**  
 <img width="1099" height="721" alt="image" src="https://github.com/user-attachments/assets/256f0179-3e47-4b49-8619-bd37e90a4314" />
